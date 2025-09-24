@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Personagem - RPG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #1C273D;
+            --bg-panel: #28374D;
+            --text-color: #E2EBF5;
+            --accent-color: #00BFFF;
+            --ui-color: #3B4B64;
+            --glow-color: #00E5FF;
+            --btn-plus: #2ecc71;
+            --btn-minus: #c0392b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .creation-interface {
+            display: flex;
+            gap: 40px;
+            background: var(--bg-panel);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid var(--ui-color);
+        }
+
+        /* ----- Seção do Avatar e Personalização ----- */
+        .character-section {
+            display: flex;
+            gap: 20px;
+        }
+
+        .avatar-container {
+            width: 400px;
+            height: 500px;
+            position: relative;
+            background: var(--ui-color);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--glow-color);
+            box-shadow: inset 0 0 10px var(--glow-color);
+        }
+
+        .avatar-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            user-select: none;
+            pointer-events: none;
+        }
+        
+        .avatar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: var(--ui-color);
+            border: 2px solid var(--accent-color);
+            color: var(--text-color);
+            font-size: 0.9em;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .nav-btn.active {
+            background: var(--accent-color);
+            box-shadow: 0 0 10px var(--glow-color);
+        }
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            background: var(--accent-color);
+        }
+
+        .options-panel {
+            width: 250px;
+            background: var(--ui-color);
+            border-radius: 10px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            height: 500px;
+            overflow-y: auto;
+        }
+        .options-panel::-webkit-scrollbar { width: 6px; }
+        .options-panel::-webkit-scrollbar-track { background: var(--bg-main); }
+        .options-panel::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 3px; }
+
+        .option-item {
+            width: 100px;
+            height: 100px;
+            background-color: var(--bg-panel);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .option-item:hover { transform: scale(1.05); }
+        .option-item.selected { border-color: var(--glow-color); box-shadow: 0 0 8px var(--glow-color); }
+        .option-item img { max-width: 100%; max-height: 100%; object-fit: cover; }
+
+        /* ----- Seção de Atributos ----- */
+        .attributes-section {
+            width: 450px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .points-display {
+            background: var(--ui-color);
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.1em;
+            letter-spacing: 1px;
+            border: 2px solid var(--accent-color);
+        }
+        .points-value {
+            color: var(--glow-color);
+            font-size: 1.5em;
+            font-family: 'Baloo 2', cursive;
+        }
+
+        .attribute-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .attribute-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--ui-color);
+            padding: 15px 20px;
+            border-radius: 10px;
+        }
+        .attribute-name {
+            font-weight: 600;
+            text-transform: uppercase;
+            flex-grow: 1;
+        }
+        .attribute-value {
+            font-family: 'Baloo 2', cursive;
+            font-size: 1.6em;
+            font-weight: 800;
+            min-width: 60px;
+            text-align: center;
+            color: var(--accent-color);
+        }
+        .attribute-controls {
+            display: flex;
+            gap: 8px;
+        }
+        .control-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1.8em;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            line-height: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .control-btn.plus { background-color: var(--btn-plus); }
+        .control-btn.minus { background-color: var(--btn-minus); }
+        .control-btn.disabled { opacity: 0.5; cursor: not-allowed; }
+        .control-btn:hover:not(.disabled) { transform: translateY(-2px); }
+
+        .confirm-btn {
+            background: var(--accent-color);
+            color: var(--text-color);
+            font-family: 'Baloo 2', cursive;
+            font-weight: 800;
+            font-size: 1.2em;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 20px;
+            text-transform: uppercase;
+        }
+        .confirm-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+            background: var(--glow-color);
+            color: var(--bg-main);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <h1 style="color: var(--glow-color); font-size: 2.5em; text-shadow: 0 0 10px var(--glow-color);">Crie seu Herói</h1>
+        <div class="creation-interface">
+            <div class="character-section">
+                <div class="avatar-container">
+                    <img id="layer-body" class="avatar-layer" src="assets/body/body-base.png" alt="Corpo do personagem">
+                    <img id="layer-hair" class="avatar-layer" src="assets/hair/hair-1.png" alt="Cabelo do personagem">
+                    <img id="layer-face" class="avatar-layer" src="assets/face/face-1.png" alt="Rosto do personagem">
+                    <img id="layer-clothes" class="avatar-layer" src="assets/clothes/clothes-1.png" alt="Roupa do personagem">
+                </div>
+                
+                <div class="avatar-nav">
+                    <button class="nav-btn active" data-category="face">Rosto</button>
+                    <button class="nav-btn" data-category="hair">Cabelo</button>
+                    <button class="nav-btn" data-category="clothes">Roupas</button>
+                </div>
+
+                <div class="options-panel" id="options-panel">
+                    </div>
+            </div>
+
+            <div class="attributes-section">
+                <div class="points-display">
+                    Pontos disponíveis: <span class="points-value" id="remaining-points">1500</span>
+                </div>
+                <div class="attribute-list">
+                    <div class="attribute-item">
+                        <span class="attribute-name">Ataque</span>
+                        <span class="attribute-value" data-attribute="attack">0</span>
+                        <div class="attribute-controls">
+                            <button class="control-btn minus" data-action="minus" data-attribute="attack">-</button>
+                            <button class="control-btn plus" data-action="plus" data-attribute="attack">+</button>
+                        </div>
+                    </div>
+                    <div class="attribute-item">
+                        <span class="attribute-name">Defesa</span>
+                        <span class="attribute-value" data-attribute="defense">0</span>
+                        <div class="attribute-controls">
+                            <button class="control-btn minus" data-action="minus" data-attribute="defense">-</button>
+                            <button class="control-btn plus" data-action="plus" data-attribute="defense">+</button>
+                        </div>
+                    </div>
+                    <div class="attribute-item">
+                        <span class="attribute-name">Inteligência</span>
+                        <span class="attribute-value" data-attribute="intelligence">0</span>
+                        <div class="attribute-controls">
+                            <button class="control-btn minus" data-action="minus" data-attribute="intelligence">-</button>
+                            <button class="control-btn plus" data-action="plus" data-attribute="intelligence">+</button>
+                        </div>
+                    </div>
+                    <div class="attribute-item">
+                        <span class="attribute-name">Agilidade</span>
+                        <span class="attribute-value" data-attribute="agility">0</span>
+                        <div class="attribute-controls">
+                            <button class="control-btn minus" data-action="minus" data-attribute="agility">-</button>
+                            <button class="control-btn plus" data-action="plus" data-attribute="agility">+</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="confirm-btn" id="confirm-btn">Confirmar Personagem</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Dados para a Personalização Visual ---
+        const characterData = {
+            face: {
+                options: [
+                    { id: 1, thumb: "assets/face/face-1-thumb.png", full: "assets/face/face-1.png" },
+                    { id: 2, thumb: "assets/face/face-2-thumb.png", full: "assets/face/face-2.png" },
+                    
+                ]
+            },
+            hair: {
+                options: [
+                    { id: 1, thumb: "assets/hair/hair-1-thumb.png", full: "assets/hair/hair-1.png" },
+                    { id: 2, thumb: "assets/hair/hair-2-thumb.png", full: "assets/hair/hair-2.png" },
+            
+                ]
+            },
+            clothes: {
+                options: [
+                    { id: 1, thumb: "assets/clothes/clothes-1-thumb.png", full: "assets/clothes/clothes-1.png" },
+                    { id: 2, thumb: "assets/clothes/clothes-2-thumb.png", full: "assets/clothes/clothes-2.png" },
+                ]
+            }
+        };
+
+        const characterState = {
+            face: characterData.face.options[0],
+            hair: characterData.hair.options[0],
+            clothes: characterData.clothes.options[0]
+        };
+
+        const avatarLayers = {
+            face: document.getElementById('layer-face'),
+            hair: document.getElementById('layer-hair'),
+            clothes: document.getElementById('layer-clothes')
+        };
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const optionsPanel = document.getElementById('options-panel');
+
+        function updateAvatar() {
+            avatarLayers.face.src = characterState.face.full;
+            avatarLayers.hair.src = characterState.hair.full;
+            avatarLayers.clothes.src = characterState.clothes.full;
+        }
+
+        function createOptionThumbnails(category) {
+            optionsPanel.innerHTML = '';
+            const options = characterData[category].options;
+            options.forEach(option => {
+                const item = document.createElement('div');
+                item.className = 'option-item';
+                if (characterState[category].id === option.id) {
+                    item.classList.add('selected');
+                }
+                const img = document.createElement('img');
+                img.src = option.thumb;
+                img.alt = `Opção ${option.id} de ${category}`;
+                item.appendChild(img);
+
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
+                    item.classList.add('selected');
+                    characterState[category] = option;
+                    updateAvatar();
+                });
+                optionsPanel.appendChild(item);
+            });
+        }
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                createOptionThumbnails(button.dataset.category);
+            });
+        });
+
+        // --- Dados e lógica para a Distribuição de Atributos ---
+        const initialPoints = 1500;
+        let remainingPoints = initialPoints;
+        const attributes = {
+            attack: 0,
+            defense: 0,
+            intelligence: 0,
+            agility: 0
+        };
+
+        const remainingPointsEl = document.getElementById('remaining-points');
+        const attributeValues = document.querySelectorAll('.attribute-value');
+        const controlButtons = document.querySelectorAll('.control-btn');
+        const confirmBtn = document.getElementById('confirm-btn');
+
+        function updateAttributeDisplay() {
+            attributeValues.forEach(el => {
+                const attr = el.dataset.attribute;
+                el.textContent = attributes[attr];
+            });
+            
+            const totalSpent = Object.values(attributes).reduce((sum, current) => sum + current, 0);
+            remainingPoints = initialPoints - totalSpent;
+            remainingPointsEl.textContent = remainingPoints;
+            
+            controlButtons.forEach(btn => {
+                const action = btn.dataset.action;
+                const attr = btn.dataset.attribute;
+                if (action === 'plus') {
+                    btn.classList.toggle('disabled', remainingPoints <= 0);
+                } else if (action === 'minus') {
+                    btn.classList.toggle('disabled', attributes[attr] <= 0);
+                }
+            });
+        }
+
+        controlButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const action = button.dataset.action;
+                const attr = button.dataset.attribute;
+                if (action === 'plus' && remainingPoints > 0) {
+                    attributes[attr]++;
+                } else if (action === 'minus' && attributes[attr] > 0) {
+                    attributes[attr]--;
+                }
+                updateAttributeDisplay();
+            });
+        });
+        
+        confirmBtn.addEventListener('click', () => {
+            alert(`Personagem Confirmado!\n\nAtributos Finais:\n- Ataque: ${attributes.attack}\n- Defesa: ${attributes.defense}\n- Inteligência: ${attributes.intelligence}\n- Agilidade: ${attributes.agility}\n\nPontos Restantes: ${remainingPoints}`);
+        });
+
+        // --- Inicialização ---
+        document.addEventListener('DOMContentLoaded', () => {
+            createOptionThumbnails('face');
+            updateAvatar();
+            updateAttributeDisplay();
+        });
+    </script>
+</body>
+</html>

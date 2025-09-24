@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rush Dash — Página Inicial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-1:#FFD966;
+      --bg-2:#FFB74D;
+      --accent:#2E2E7E;
+      --glass: rgba(255,255,255,0.14);
+      --glass-2: rgba(255,255,255,0.08);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+
+    /* Page layout */
+    .wrap{
+      min-height:100%;display:flex;flex-direction:column;background:linear-gradient(120deg,var(--bg-1),var(--bg-2));
+      color:#111;
+      overflow:hidden;
+    }
+
+    header{
+      display:flex;align-items:center;justify-content:space-between;padding:18px 28px;backdrop-filter: blur(4px);
+    }
+    .logo{display:flex;gap:12px;align-items:center}
+    .logo .mark{
+      width:56px;height:56px;border-radius:12px;background:linear-gradient(180deg,#fff8e6,#ffd39b);display:grid;place-items:center;box-shadow:0 6px 18px rgba(46,46,126,0.18);
+      font-family:'Baloo 2',cursive;font-weight:800;color:var(--accent);font-size:20px
+    }
+    nav{display:flex;gap:12px;align-items:center}
+    .nav-btn{background:transparent;border:0;padding:8px 12px;border-radius:10px;font-weight:600;cursor:pointer}
+    .nav-btn:hover{background:var(--glass)}
+
+    main{display:flex;flex:1;padding:28px;gap:28px}
+
+    /* Left: hero */
+    .hero{flex:1;position:relative;border-radius:18px;padding:28px;background:linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0.04));box-shadow:0 10px 30px rgba(0,0,0,0.08);overflow:hidden}
+    .hero-grid{display:flex;flex-direction:column;height:100%;justify-content:center;gap:18px}
+    h1{font-family:'Baloo 2',cursive;margin:0;font-size:44px;color:var(--accent)}
+    p.lead{margin:0;color:#222;opacity:0.86;font-size:16px}
+
+    .cta-row{display:flex;gap:14px;align-items:center}
+    .start-btn{background:var(--accent);color:white;border:0;padding:14px 22px;border-radius:14px;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 8px 20px rgba(46,46,126,0.28)}
+    .start-btn:active{transform:translateY(1px)}
+    .ghost-btn{background:transparent;border:2px solid rgba(46,46,126,0.12);padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer}
+
+    /* Right: panels */
+    .side{width:340px;display:flex;flex-direction:column;gap:18px}
+    .card{background:linear-gradient(180deg,var(--glass),var(--glass-2));padding:16px;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+    .levels{display:flex;flex-direction:column;gap:12px}
+    .level-item{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:10px;background:rgba(255,255,255,0.03)}
+
+    /* Animated track silhouette */\    
+    .track-layer{position:absolute;inset:0;pointer-events:none}
+    .track{position:absolute;left:-10%;bottom:6%;width:120%;height:42%;background:linear-gradient(90deg,rgba(0,0,0,0.06),rgba(255,255,255,0.02));transform:skewY(-6deg);box-shadow:0 40px 80px rgba(0,0,0,0.06)}
+
+    /* A simple runner illustration (placeholder) */
+    .runner{position:absolute;left:12%;bottom:16%;width:120px;height:120px;border-radius:24px;background:linear-gradient(180deg#FFE38D,#FFDB6E);display:grid;place-items:center;font-weight:800;font-family:'Baloo 2',cursive;color:var(--accent);box-shadow:0 18px 40px rgba(46,46,126,0.12);transform-origin:center}
+    .runner .eye{width:28px;height:28px;border-radius:50%;background:white;display:inline-block;margin:0 2px}
+
+    /* Floating confetti */
+    .confetti{position:absolute;inset:0;pointer-events:none;}
+    .confetti span{position:absolute;display:block;width:8px;height:8px;border-radius:2px;opacity:0.95;animation:fall 5s linear infinite}
+    @keyframes fall{0%{transform:translateY(-10vh) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(360deg);opacity:0.6}}
+
+    /* Footer */
+    footer{padding:18px 28px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#222;opacity:0.85}
+
+    /* Responsive */
+    @media (max-width:980px){
+      main{flex-direction:column}
+      .side{width:100%}
+      .runner{left:6%;width:92px;height:92px}
+    }
+
+    @media (max-width:520px){
+      h1{font-size:28px}
+      .logo .mark{width:44px;height:44px;font-size:16px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" role="application" aria-label="Página inicial do Rush Dash">
+    <header>
+      <div class="logo">
+        <div class="mark" aria-hidden="true">RD</div>
+        <div>
+          <div style="font-weight:700;">Rush Dash</div>
+          <div style="font-size:12px;opacity:0.9">Endless runner — inspirado em jogos de corrida</div>
+        </div>
+      </div>
+
+      <nav aria-label="Navegação principal">
+        <button class="nav-btn" onclick="openPanel('shop')" aria-controls="panel-shop">Loja</button>
+        <button class="nav-btn" onclick="openPanel('leader')" aria-controls="panel-leader">Ranking</button>
+        <button class="nav-btn" onclick="openPanel('settings')" aria-controls="panel-settings">Configurações</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="track-layer" aria-hidden="true">
+          <div class="track"></div>
+          <div class="runner" id="runner" title="Personagem" role="img" aria-label="Personagem correndo">
+            <div style="display:flex;align-items:center;gap:6px">
+              <span class="eye"></span>
+              <span class="eye"></span>
+            </div>
+          </div>
+          <div class="confetti" id="confetti"></div>
+        </div>
+
+        <div class="hero-grid">
+          <div>
+            <h1 id="hero-title">Corra, colete e vença!</h1>
+            <p class="lead">Aventure-se por mundos coloridos, desvie de obstáculos, colete moedas e destrave personagens malucos. Fácil de aprender — difícil de largar.</p>
+          </div>
+
+          <div class="cta-row" role="region" aria-label="Ações principais">
+            <button class="start-btn" id="startBtn">Iniciar Jogo</button>
+            <button class="ghost-btn" id="howBtn">Como Jogar</button>
+          </div>
+
+          <div style="display:flex;gap:12px;align-items:center">
+            <div style="font-size:13px;color:#222;opacity:0.9">Seu progresso</div>
+            <progress value="48" max="100" style="width:240px;height:12px;border-radius:10px"></progress>
+            <div style="min-width:42px;text-align:right;font-weight:700">48%</div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side" aria-label="Painéis laterais">
+        <div class="card" id="panel-shop" role="region" aria-hidden="true">
+          <h3 style="margin:0 0 8px 0">Loja</h3>
+          <div style="font-size:13px;opacity:0.9">Skins, boosts e power-ups. Comece com 500 moedas grátis.</div>
+          <div style="display:flex;gap:10px;margin-top:12px">
+            <button class="start-btn" style="padding:10px 14px;font-size:14px">Ir para Loja</button>
+            <button class="ghost-btn" style="padding:10px 14px">Obter Moedas</button>
+          </div>
+        </div>
+
+        <div class="card" id="panel-leader" role="region" aria-hidden="true">
+          <h3 style="margin:0 0 8px 0">Ranking</h3>
+          <div class="levels">
+            <div class="level-item"><div>#1 — Alex</div><div>28.420</div></div>
+            <div class="level-item"><div>#2 — Sam</div><div>24.917</div></div>
+            <div class="level-item"><div>#3 — You</div><div>18.503</div></div>
+          </div>
+        </div>
+
+        <div class="card" id="panel-settings" role="region" aria-hidden="true">
+          <h3 style="margin:0 0 8px 0">Configurações</h3>
+          <label style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:8px">
+            <span>Som</span>
+            <input type="checkbox" id="sndToggle" checked />
+          </label>
+          <label style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:8px">
+            <span>Vibração</span>
+            <input type="checkbox" id="vibToggle" />
+          </label>
+          <div style="margin-top:12px;font-size:13px;opacity:0.9">Acessibilidade: suporte a teclado e alto contraste disponível no jogo.</div>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      <div>© Rush Dash — Versão Demo</div>
+      <div style="opacity:0.9">Teclas: <strong>Espaço</strong> para pular • <strong>S</strong> para deslizar</div>
+    </footer>
+  </div>
+
+  <script>
+    // Small interactions and animations
+    const startBtn = document.getElementById('startBtn');
+    const howBtn = document.getElementById('howBtn');
+    const runner = document.getElementById('runner');
+    const confetti = document.getElementById('confetti');
+
+    // Generate confetti pieces
+    function makeConfetti(n=18){
+      const colors = ['#FF6B6B','#FFD93D','#6BCB77','#4D96FF','#9D4EDD'];
+      for(let i=0;i<n;i++){
+        const el = document.createElement('span');
+        el.style.left = (Math.random()*100)+'%';
+        el.style.top = (Math.random()*30)+'%';
+        el.style.width = 6+Math.random()*10+'px';
+        el.style.height = 6+Math.random()*10+'px';
+        el.style.background = colors[Math.floor(Math.random()*colors.length)];
+        el.style.animationDelay = (Math.random()*5)+'s';
+        el.style.transform = 'rotate('+Math.floor(Math.random()*360)+'deg)';
+        confetti.appendChild(el);
+      }
+    }
+    makeConfetti(22);
+
+    // Start animation: runner jumps and then a simulated fade into game
+    startBtn.addEventListener('click', ()=>{
+      startBtn.disabled = true;
+      startBtn.textContent = 'Carregando...';
+      runner.animate([
+        {transform: 'translateY(0) scale(1)'},
+        {transform: 'translateY(-120px) scale(1.08)'},
+        {transform: 'translateY(0) scale(1)'}
+      ],{duration:900,easing:'cubic-bezier(.2,.9,.2,1)'});
+
+      setTimeout(()=>{
+        // Simple transition to 'in-game' state
+        document.querySelector('.wrap').style.transition = 'filter 0.6s ease';
+        document.querySelector('.wrap').style.filter = 'blur(0.6px)';
+        startBtn.textContent = 'Carregar Nível';
+        // In a real game you'd redirect to the game canvas or start the engine
+        alert('Atenção: aqui o jogo iniciaria (integração com engine).');
+        startBtn.disabled = false;
+        startBtn.textContent = 'Iniciar Jogo';
+      },1100);
+    });
+
+    howBtn.addEventListener('click', ()=>{
+      alert('Use Espaço para pular, S para deslizar. Colete moedas e evite obstáculos!');
+    });
+
+    // Keyboard accessibility
+    document.addEventListener('keydown', (e)=>{
+      if(e.code === 'Space'){
+        e.preventDefault();
+        triggerJump();
+      }
+      if(e.key && e.key.toLowerCase() === 's'){
+        triggerSlide();
+      }
+    });
+
+    function triggerJump(){
+      runner.animate([
+        {transform: 'translateY(0)'},
+        {transform: 'translateY(-140px)'},
+        {transform: 'translateY(0)'}
+      ],{duration:600,easing:'cubic-bezier(.2,.9,.2,1)'});
+    }
+    function triggerSlide(){
+      runner.animate([
+        {transform: 'translateY(0) scaleX(1)'},
+        {transform: 'translateY(24px) scaleX(1.03)'}
+      ],{duration:350,fill:'forwards'});
+      setTimeout(()=> runner.animate([{transform:'translateY(0)'}],{duration:250}),450);
+    }
+
+    // Panels open/close
+    function openPanel(id){
+      const panels = ['panel-shop','panel-leader','panel-settings'];
+      panels.forEach(p=>{
+        const el = document.getElementById(p);
+        if(!el) return;
+        el.setAttribute('aria-hidden', p !== 'panel-'+id.replace('panel-',''));
+      });
+      // quick visual feedback
+      const el = document.getElementById('panel-'+id);
+      if(el){el.animate([{transform:'translateY(-6px)',opacity:0},{transform:'translateY(0)',opacity:1}],{duration:300})}
+    }
+
+    // initial state: show ranking
+    openPanel('leader');
+  </script>
+</body>
+</html>
