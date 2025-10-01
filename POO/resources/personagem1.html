@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalização do Guardião - Elarion</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Cinzel', serif;
+      background: url('mapa2.png') no-repeat center center/cover;
+      background-size: cover;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      background: rgba(0,0,0,0.6);
+      padding: 15px 30px;
+      border-radius: 12px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      text-shadow: 0 0 15px #ff9800;
+    }
+
+    .section {
+      margin: 20px 0;
+      width: 100%;
+      max-width: 900px;
+      background: rgba(0,0,0,0.7);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    .section h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #ffd700;
+      text-shadow: 0 0 8px #000;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      border-color: #ffd700;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .card.selected {
+      border-color: #ff9800;
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 0 15px #ff9800;
+    }
+
+    .card span {
+      display: block;
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    /* Estilos específicos para os elementos */
+    .elemento-fogo {
+      background: rgba(255, 69, 0, 0.1);
+      border: 2px solid transparent;
+    }
+    
+    .elemento-fogo:hover {
+      background: rgba(255, 69, 0, 0.3);
+      border-color: #ff4500;
+      box-shadow: 0 0 15px #ff4500;
+    }
+    
+    .elemento-fogo.selected {
+      background: rgba(255, 69, 0, 0.4);
+      border-color: #ff4500;
+      box-shadow: 0 0 20px #ff4500;
+    }
+
+    .elemento-agua {
+      background: rgba(30, 144, 255, 0.1);
+      border: 2px solid transparent;
+    }
+    
+    .elemento-agua:hover {
+      background: rgba(30, 144, 255, 0.3);
+      border-color: #1e90ff;
+      box-shadow: 0 0 15px #1e90ff;
+    }
+    
+    .elemento-agua.selected {
+      background: rgba(30, 144, 255, 0.4);
+      border-color: #1e90ff;
+      box-shadow: 0 0 20px #1e90ff;
+    }
+
+    .elemento-terra {
+      background: rgba(139, 69, 19, 0.1);
+      border: 2px solid transparent;
+    }
+    
+    .elemento-terra:hover {
+      background: rgba(139, 69, 19, 0.3);
+      border-color: #8b4513;
+      box-shadow: 0 0 15px #8b4513;
+    }
+    
+    .elemento-terra.selected {
+      background: rgba(139, 69, 19, 0.4);
+      border-color: #8b4513;
+      box-shadow: 0 0 20px #8b4513;
+    }
+
+    .elemento-ar {
+      background: rgba(176, 224, 230, 0.1);
+      border: 2px solid transparent;
+    }
+    
+    .elemento-ar:hover {
+      background: rgba(176, 224, 230, 0.3);
+      border-color: #b0e0e6;
+      box-shadow: 0 0 15px #b0e0e6;
+    }
+    
+    .elemento-ar.selected {
+      background: rgba(176, 224, 230, 0.4);
+      border-color: #b0e0e6;
+      box-shadow: 0 0 20px #b0e0e6;
+    }
+
+    .preview {
+      margin-top: 30px;
+      background: rgba(0,0,0,0.8);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      background: linear-gradient(45deg, #ff5722, #ff9800);
+      color: #fff;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: linear-gradient(45deg, #e64a19, #f57c00);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Personalização do Guardião</h1>
+    <p>Escolha suas características e prepare-se para defender Elarion!</p>
+  </header>
+
+  <!-- Aparência -->
+  <div class="section">
+    <h2>Aparência</h2>
+    <div class="options" id="aparencia">
+      <div class="card" data-value="Cabelo Longo"><span>💇‍♂️</span>Cabelo Longo</div>
+      <div class="card" data-value="Cabelo Curto"><span>✂️</span>Cabelo Curto</div>
+      <div class="card" data-value="Tranças"><span>🌀</span>Tranças</div>
+      <div class="card" data-value="Careca"><span>👤</span>Careca</div>
+    </div>
+  </div>
+
+  <!-- Elemento -->
+  <div class="section">
+    <h2>🌍 Origem Elemental</h2>
+    <div class="options" id="elemento">
+      <div class="card elemento-fogo" data-value="Fogo"><span>🔥</span>Fogo</div>
+      <div class="card elemento-agua" data-value="Água"><span>💧</span>Água</div>
+      <div class="card elemento-terra" data-value="Terra"><span>🌱</span>Terra</div>
+      <div class="card elemento-ar" data-value="Ar"><span>🌪️</span>Ar</div>
+    </div>
+  </div>
+
+  <!-- Classe -->
+  <div class="section">
+    <h2>Classe</h2>
+    <div class="options" id="classe">
+      <div class="card" data-value="Espadachim"><span>⚔️</span>Espadachim</div>
+      <div class="card" data-value="Mago"><span>🧙 </span>Mago</div>
+      <div class="card" data-value="Arqueiro"><span>🏹</span>Arqueiro</div>
+      <div class="card" data-value="Defensor"><span>🛡️</span>Defensor</div>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <div class="preview" id="preview">
+    <h2>✨ Seu Guardião</h2>
+    <p>Escolha as opções acima para ver como será seu personagem.</p>
+  </div>
+
+  <button class="btn" onclick="confirmar()">Confirmar Guardião</button>
+
+  <script>
+    const selections = {
+      aparencia: null,
+      elemento: null,
+      classe: null
+    };
+
+    document.querySelectorAll(".options").forEach(group => {
+      group.querySelectorAll(".card").forEach(card => {
+        card.addEventListener("click", () => {
+          group.querySelectorAll(".card").forEach(c => c.classList.remove("selected"));
+          card.classList.add("selected");
+          selections[group.id] = card.getAttribute("data-value");
+          atualizarPreview();
+        });
+      });
+    });
+
+    function atualizarPreview() {
+      const { aparencia, elemento, classe } = selections;
+      const preview = document.getElementById("preview");
+      preview.innerHTML = `
+        <h2>⚔️ Seu Guardião ⚔️</h2>
+        <p><strong>Aparência:</strong> ${aparencia || "?"}</p>
+        <p><strong>Elemento:</strong> ${elemento || "?"}</p>
+        <p><strong>Classe:</strong> ${classe || "?"}</p>
+        <hr>
+        <p>${elemento ? "Seu guardião terá ataques especiais de " + elemento + "!" : "Escolha um elemento para ver poderes."}</p>
+      `;
+    }
+
+    function confirmar() {
+      if (!selections.aparencia || !selections.elemento || !selections.classe) {
+        alert("⚠️ Escolha todas as opções antes de confirmar!");
+        return;
+      }
+      alert(`Guardião criado! 
+👤 Aparência: ${selections.aparencia}
+🌍 Elemento: ${selections.elemento}
+⚔️ Classe: ${selections.classe}
+
+Sua jornada em Elarion começa agora!`);
+    }
+  </script>
+</body>
+</html>
